@@ -1,1 +1,1 @@
-# Phần mềm quản lý kho hàng bằng điện thoại
+# Web quản lý kho hàng điện thoại
