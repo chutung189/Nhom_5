@@ -12,11 +12,18 @@ Dự án Web Quản Lý Kho Hàng Điện Thoại là một ứng dụng web đ�
 # Công Nghệ Sử Dụng
 
 - Frontend:
+- 
   HTML: Cấu trúc trang web, các form và bảng hiển thị dữ liệu.
+  
   CSS: Thiết kế giao diện người dùng, tạo các bảng thông tin sản phẩm và báo cáo kho.
+  
   JavaScript: Tạo các tính năng động, như thêm, sửa, xóa sản phẩm và cập nhật thông tin kho mà không cần tải lại trang.
   
+  
 - Backend:
+- 
   PHP: Xử lý các yêu cầu từ frontend và kết nối với cơ sở dữ liệu.
+  
   MySQL: Lưu trữ và quản lý dữ liệu sản phẩm, đơn hàng và thông tin người dùng.
+  
   Laravel (hoặc PHP thuần): Xây dựng các API để tương tác với frontend.
