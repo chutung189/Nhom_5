@@ -1,23 +1,29 @@
-# Web quản lý kho hàng điện thoại
+
+# Web Bán Đồ Điện Tử
+
 Mô Tả Dự Án
-Dự án Web Quản Lý Kho Hàng Điện Thoại là một ứng dụng web được xây dựng để giúp các cửa hàng hoặc doanh nghiệp quản lý kho hàng điện thoại di động. Hệ thống cung cấp các tính năng như quản lý thông tin sản phẩm, theo dõi nhập/xuất hàng hóa, và tạo báo cáo kho hàng, giúp người quản lý dễ dàng theo dõi và kiểm soát lượng hàng tồn kho, đơn hàng và các giao dịch.
+Dự án Web Bán Đồ Điện Tử là một nền tảng trực tuyến giúp các doanh nghiệp kinh doanh các sản phẩm điện tử như laptop, điện thoại, và PC. Trang web cung cấp giao diện thân thiện, hiện đại, giúp khách hàng dễ dàng tìm kiếm, lựa chọn và mua sắm. Với các tính năng quản lý đơn hàng, giỏ hàng, và thanh toán trực tuyến, hệ thống hỗ trợ tối ưu hóa trải nghiệm mua sắm và quản lý kinh doanh hiệu quả.
 
 # Các Tính Năng
 
-- Quản Lý Sản Phẩm: Thêm, sửa, xóa và xem thông tin các sản phẩm trong kho (tên, mã, giá, số lượng, mô tả).
-- Quản Lý Nhập/Xuất Hàng: Ghi nhận thông tin khi nhập hoặc xuất hàng, tự động cập nhật số lượng trong kho.
-- Báo Cáo Kho Hàng: Xem báo cáo tình trạng kho, số lượng hàng tồn kho, các sản phẩm bán chạy và các đơn hàng.
-- Tìm Kiếm và Lọc: Tìm kiếm nhanh sản phẩm theo tên, mã, hoặc loại điện thoại.
-- Quản Lý Người Dùng: Đăng nhập, đăng xuất và phân quyền người dùng (quản lý, nhân viên).
+- Danh Mục Sản Phẩm: Hiển thị và xem chi tiết sản phẩm với thông số kỹ thuật, giá và hình ảnh.
+- Giỏ Hàng và Thanh Toán: Thêm sản phẩm vào giỏ hàng, hỗ trợ thanh toán online và COD.
+- Tìm Kiếm và Lọc: Tìm kiếm theo tên, thương hiệu, danh mục; lọc theo giá, loại sản phẩm.
+- Đăng Ký và Đăng Nhập: Quản lý tài khoản người dùng, lưu lịch sử mua hàng và thông tin giao hàng.
+- Quản Lý Đơn Hàng: Theo dõi trạng thái đơn hàng và lịch sử mua sắm.
+- Đánh Giá Sản Phẩm: Để lại đánh giá, nhận xét và xem xếp hạng sản phẩm.
+- Khuyến Mãi: Áp dụng mã giảm giá và hiển thị các chương trình ưu đãi.
+- Hỗ Trợ Khách Hàng: Liên hệ hỗ trợ trực tuyến và tra cứu chính sách bảo hành, đổi trả.
+  
 # Công Nghệ Sử Dụng
 
 - Frontend:
   
   HTML: Cấu trúc trang web, các form và bảng hiển thị dữ liệu.
   
-  CSS: Thiết kế giao diện người dùng, tạo các bảng thông tin sản phẩm và báo cáo kho.
+  CSS: Thiết kế giao diện người dùng, tạo các bảng thông tin sản phẩm.
   
-  JavaScript: Tạo các tính năng động, như thêm, sửa, xóa sản phẩm và cập nhật thông tin kho mà không cần tải lại trang.
+  JavaScript: Tạo các tính năng động, như thêm, sửa, xóa sản phẩm và cập nhật thông tin sản phẩm mà không cần tải lại trang.
   
   
 - Backend:
