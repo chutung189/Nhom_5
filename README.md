@@ -18,12 +18,12 @@ Dự án App Mobile Bán Đồ Điện Tử là một nền tảng trực tuyế
 
 Frontend (Flutter):
 
-  -Giao diện người dùng được xây dựng bằng Flutter.
+  - Giao diện người dùng được xây dựng bằng Flutter.
 
-  -Dữ liệu sản phẩm được lấy từ file JSON cục bộ hoặc từ một API đơn giản trả về JSON.
+  
 
 Backend (Firebase):
 
-  -Sử dụng Firebase Authentication để quản lý đăng nhập và đăng ký người dùng.
+  - Sử dụng Firebase
   
 
