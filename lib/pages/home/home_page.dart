@@ -4,6 +4,12 @@ import 'package:ecommerece_flutter_app/common/constants/sized_box.dart';
 import 'package:ecommerece_flutter_app/common/constants/space.dart';
 import 'package:ecommerece_flutter_app/common/helper/helper.dart';
 import 'package:ecommerece_flutter_app/common/widgets/app_bar/app_bar.dart';
+import 'package:ecommerece_flutter_app/common/widgets/brand_category/viewall.dart';
+import 'package:ecommerece_flutter_app/common/widgets/categorypage/accessories_page.dart';
+import 'package:ecommerece_flutter_app/common/widgets/categorypage/laptop_page.dart';
+import 'package:ecommerece_flutter_app/common/widgets/categorypage/pc_page.dart';
+import 'package:ecommerece_flutter_app/common/widgets/categorypage/smartphone_page.dart';
+import 'package:ecommerece_flutter_app/common/widgets/categorypage/tablet_page.dart';
 import 'package:ecommerece_flutter_app/common/widgets/curved_edges/curved_edges.dart';
 import 'package:ecommerece_flutter_app/common/widgets/main_title_view_all_butotn/main_title_and_viewall_button.dart';
 import 'package:ecommerece_flutter_app/pages/intro/signin_signup/signin_page.dart';
@@ -58,13 +64,7 @@ class _HomePageState extends State<HomePage> {
                   MainTitle(title: 'Popular Category'),
                   KSizedBox.smallHeightSpace,
                   KSizedBox.smallHeightSpace,
-                  ListViewHorizontal(
-                    onTap: () {
-                      //thay login() thành widget cần đi tới
-                      Navigator.pushReplacement(context,
-                          MaterialPageRoute(builder: (context) => LoginPage()));
-                    },
-                  ),
+                  ListViewHorizontal(),
                   KSizedBox.mediumSpace,
                 ],
               ),
@@ -80,7 +80,14 @@ class _HomePageState extends State<HomePage> {
                   Center(
                       child: BannerIndicatorRow(currentBanner: currentBanner)),
                   KSizedBox.heightSpace,
-                  MainTitleAndViewAllButton(title: 'Sale', onPressed: () {}),
+                  MainTitleAndViewAllButton(
+                      title: 'Sale',
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const ViewAllPage()));
+                      }),
                   KSizedBox.smallHeightSpace,
                   KSizedBox.smallHeightSpace,
                   FutureBuilder<List<Product>>(
@@ -260,7 +267,7 @@ class _HomePageState extends State<HomePage> {
       clipper: WCustomCurveyEdges(),
       child: Container(
         color: KColors.primaryColor,
-        height: 400,
+        height: 380,
         child: Stack(
           children: [
             Positioned(
@@ -377,12 +384,25 @@ class ImageContainer extends StatelessWidget {
 }
 
 class ListViewHorizontal extends StatelessWidget {
-  const ListViewHorizontal({
-    super.key,
-    required this.onTap,
-  });
+  ListViewHorizontal({super.key});
 
-  final VoidCallback onTap;
+  final List<CategoryItem> categories = [
+    CategoryItem(
+        name: 'Laptop', icon: 'assets/icons/laptop.jpg', page: LaptopPage()),
+    CategoryItem(name: 'PC', icon: 'assets/icons/pc.jpeg', page: PcPage()),
+    CategoryItem(
+        name: 'Smartphone',
+        icon: 'assets/icons/smartphone.jpg',
+        page: SmartphonePage()),
+    CategoryItem(
+        name: 'Tablet',
+        icon: 'assets/icons/vector-tablet.jpg',
+        page: TabletPage()),
+    CategoryItem(
+        name: 'Accessories',
+        icon: 'assets/icons/usb.jpg',
+        page: AccessoriesPage()),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -391,10 +411,17 @@ class ListViewHorizontal extends StatelessWidget {
       height: 80,
       child: ListView.builder(
         shrinkWrap: true,
-        itemCount: 6,
+        itemCount: categories.length,
         scrollDirection: Axis.horizontal,
         itemBuilder: (_, index) {
-          return GestureDetector(onTap: onTap, child: ListViewChild());
+          final category = categories[index];
+          return GestureDetector(
+            onTap: () {
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (_) => category.page));
+            },
+            child: ListViewChild(category: category),
+          );
         },
       ),
     );
@@ -402,9 +429,9 @@ class ListViewHorizontal extends StatelessWidget {
 }
 
 class ListViewChild extends StatelessWidget {
-  const ListViewChild({
-    super.key,
-  });
+  const ListViewChild({super.key, required this.category});
+
+  final CategoryItem category;
 
   @override
   Widget build(BuildContext context) {
@@ -422,18 +449,20 @@ class ListViewChild extends StatelessWidget {
                     : Colors.white,
                 borderRadius: BorderRadius.circular(15)),
             child: Center(
-              child: Image(
-                image: AssetImage('assets/icons/laptop_icon.png'),
-                fit: BoxFit.cover,
-                color: Helper.isDarkMode(context)
-                    ? KColors.dartModeColor
-                    : KColors.lightModeColor,
+              child: Image.asset(
+                category.icon,
+                width: 50,
+                height: 50,
+                fit: BoxFit.contain,
+                errorBuilder: (context, error, stackTrace) {
+                  return Icon(Icons.broken_image, color: Colors.red, size: 40);
+                },
               ),
             ),
           ),
           KSizedBox.smallHeightSpace,
           Text(
-            'Laptop',
+            category.name,
             style: Theme.of(context)
                 .textTheme
                 .labelMedium!
@@ -445,4 +474,12 @@ class ListViewChild extends StatelessWidget {
       ),
     );
   }
+}
+
+class CategoryItem {
+  final String name;
+  final String icon;
+  final Widget page;
+
+  CategoryItem({required this.name, required this.icon, required this.page});
 }
