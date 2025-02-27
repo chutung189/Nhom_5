@@ -6,6 +6,7 @@ import 'package:ecommerece_flutter_app/common/helper/helper.dart';
 import 'package:ecommerece_flutter_app/common/widgets/app_bar/app_bar.dart';
 import 'package:ecommerece_flutter_app/common/widgets/curved_edges/curved_edges.dart';
 import 'package:ecommerece_flutter_app/common/widgets/main_title_view_all_butotn/main_title_and_viewall_button.dart';
+import 'package:ecommerece_flutter_app/pages/cart/cart_page.dart';
 import 'package:ecommerece_flutter_app/pages/intro/signin_signup/signin_page.dart';
 import 'package:flutter/material.dart';
 import 'package:ecommerece_flutter_app/pages/product_detail/product_detail.dart';
@@ -16,6 +17,7 @@ import '../../common/widgets/search/search.dart';
 import '../../common/widgets/title/main_title.dart';
 import '../../models/product.dart';
 import '../../services/product_service.dart';
+import '../search/search_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -26,6 +28,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int currentBanner = 0;
+  final TextEditingController _searchController = TextEditingController();
   final ProductService _productService = ProductService();
   late Future<List<Product>> _productsFuture;
   @override
@@ -41,26 +44,19 @@ class _HomePageState extends State<HomePage> {
         scrollDirection: Axis.vertical,
         child: Column(
           children: [
-            _headerContainer(
+            headerContainer(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _textAndCartButton(context),
                   KSizedBox.mediumSpace,
-                  SearchContainer(
-                    onTap: () {
-                      //thay login() thành widget cần đi tới
-                      Navigator.pushReplacement(context,
-                          MaterialPageRoute(builder: (context) => LoginPage()));
-                    },
-                  ),
+                  SearchHead(searchController: _searchController),
                   KSizedBox.mediumSpace,
                   MainTitle(title: 'Popular Category'),
                   KSizedBox.smallHeightSpace,
                   KSizedBox.smallHeightSpace,
                   ListViewHorizontal(
                     onTap: () {
-                      //thay login() thành widget cần đi tới
                       Navigator.pushReplacement(context,
                           MaterialPageRoute(builder: (context) => LoginPage()));
                     },
@@ -109,26 +105,25 @@ class _HomePageState extends State<HomePage> {
                               mainAxisSpacing:
                                   Helper.screenWidth(context) > 600 ? 20 : 5,
                               crossAxisSpacing:
-                                  Helper.screenWidth(context) > 600 ? 20 : 5,
+                                  Helper.screenWidth(context) > 600 ? 20 : 3,
                               mainAxisExtent: Helper.screenWidth(context) > 600
                                   ? Helper.screenHeight(context) * 0.27
                                   : Helper.screenWidth(context) < 390
                                       ? Helper.screenHeight(context) * 0.43
                                       : Helper.screenHeight(context) * 0.33,
                             ),
-
-                            //làm dạng ngang và nếu điện thoại nhỏ sẽ đổi sang dạng đó
-
                             itemBuilder: (_, index) {
                               final product = products[index];
                               return GestureDetector(
                                 onTap: () {
                                   //thay login() thành widget cần đi tới
-                                  Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              ProductDetail()));
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => ProductDetail(
+
+                                        )),
+                                  );
                                 },
                                 child: InfoProductContainerVer(
                                   // context: context,
@@ -144,33 +139,6 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               );
                             });
-                        // ListView.builder(
-                        //   itemCount: products.length,
-                        //   itemBuilder: (context, index) {
-                        //     Product product = products[index];
-                        //     return GridviewProductsContainer(
-                        //       length: products.length,
-                        //       imageProduct: product.imageUrl,
-                        //       nameProduct:
-                        //           product.name,
-                        //       priceProduct: Helper.formatCurrency(product.priceProduct),
-                        //       isSale: product.isSale,
-                        //       oldPrice: Helper.formatCurrency(product.oldPrice),
-                        //       salePercent: product.salePercent,
-                        //       rateProduct: '4.8',
-                        //       isSmallDevice: Helper.screenWidth(context) < 390
-                        //           ? true
-                        //           : false,
-                        //       onTap: () {
-                        //         //thay login() thành widget cần đi tới
-                        //         Navigator.pushReplacement(
-                        //             context,
-                        //             MaterialPageRoute(
-                        //                 builder: (context) => ProductDetail()));
-                        //       },
-                        //     );
-                        //   },
-                        // );
                       })
                 ],
               ),
@@ -230,7 +198,12 @@ class _HomePageState extends State<HomePage> {
       children: [
         IconButton(
           padding: EdgeInsets.only(right: 8),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => CartPage()),
+            );
+          },
           icon: Icon(Icons.shopping_cart),
           color: Colors.white,
         ),
@@ -255,7 +228,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  ClipPath _headerContainer({required Widget child}) {
+  ClipPath headerContainer({required Widget child}) {
     return ClipPath(
       clipper: WCustomCurveyEdges(),
       child: Container(
@@ -283,6 +256,58 @@ class _HomePageState extends State<HomePage> {
                 )),
             child
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class SearchHead extends StatelessWidget {
+  const SearchHead({
+    super.key,
+    required TextEditingController searchController,
+  }) : _searchController = searchController;
+
+  final TextEditingController _searchController;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Container(
+        width: Helper.screenWidth(context) * 0.9,
+        decoration: BoxDecoration(
+            color: Helper.isDarkMode(context)
+                ? KColors.lightModeColor
+                : Colors.white,
+            borderRadius: BorderRadius.circular(15),
+            border: Border.all(color: KColors.dartModeColor)),
+        child: Padding(
+          padding: const EdgeInsets.only(left: 8.0),
+          child: TextField(
+            controller: _searchController,
+            decoration: InputDecoration(
+              border: InputBorder.none,
+              enabledBorder: InputBorder.none,
+              focusedBorder: InputBorder.none,
+              labelText: '  Nhập tên sản phẩm',
+              labelStyle: Theme.of(context).textTheme.bodySmall,
+              suffixIcon: IconButton(
+                icon: Icon(Icons.search),
+                onPressed: () {
+                  String searchQuery = _searchController.text.trim();
+                  if (searchQuery.isNotEmpty) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            SearchPage(searchQuery: searchQuery),
+                      ),
+                    );
+                  }
+                },
+              ),
+            ),
+          ),
         ),
       ),
     );
@@ -423,7 +448,7 @@ class ListViewChild extends StatelessWidget {
                 borderRadius: BorderRadius.circular(15)),
             child: Center(
               child: Image(
-                image: AssetImage('assets/icons/laptop_icon.png'),
+                image: AssetImage('assets/icons/laptop.jpg'),
                 fit: BoxFit.cover,
                 color: Helper.isDarkMode(context)
                     ? KColors.dartModeColor
