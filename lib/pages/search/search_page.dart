@@ -8,7 +8,7 @@ import '../product_detail/product_detail.dart';
 class SearchPage extends StatefulWidget {
   final String searchQuery;
 
-  SearchPage({required this.searchQuery});
+  const SearchPage({super.key, required this.searchQuery});
 
   @override
   _SearchPageState createState() => _SearchPageState();
@@ -23,7 +23,7 @@ class _SearchPageState extends State<SearchPage> {
     _searchResults = FirebaseFirestore.instance
         .collection('products')
         .where('name', isGreaterThanOrEqualTo: widget.searchQuery)
-        .where('name', isLessThanOrEqualTo: widget.searchQuery + '\uf8ff')
+        .where('name', isLessThanOrEqualTo: '${widget.searchQuery}\uf8ff')
         .get();
   }
 
@@ -55,56 +55,63 @@ class _SearchPageState extends State<SearchPage> {
             //   },
             // );
             return GridView.builder(
-                            itemCount: products.length,
-                            shrinkWrap: true,
-                            padding: EdgeInsets.symmetric(horizontal: 5),
-                            physics: NeverScrollableScrollPhysics(),
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount:
-                                  Helper.screenWidth(context) > 600 ? 4 : 2,
-                              mainAxisSpacing:
-                                  Helper.screenWidth(context) > 600 ? 20 : 5,
-                              crossAxisSpacing:
-                                  Helper.screenWidth(context) > 600 ? 20 : 5,
-                              mainAxisExtent: Helper.screenWidth(context) > 600
-                                  ? Helper.screenHeight(context) * 0.27
-                                  : Helper.screenWidth(context) < 390
-                                      ? Helper.screenHeight(context) * 0.43
-                                      : Helper.screenHeight(context) * 0.33,
-                            ),
+                itemCount: products.length,
+                shrinkWrap: true,
+                padding: EdgeInsets.symmetric(horizontal: 5),
+                physics: NeverScrollableScrollPhysics(),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: Helper.screenWidth(context) > 600 ? 4 : 2,
+                  mainAxisSpacing: Helper.screenWidth(context) > 600 ? 20 : 5,
+                  crossAxisSpacing: Helper.screenWidth(context) > 600 ? 20 : 5,
+                  mainAxisExtent: Helper.screenWidth(context) > 600
+                      ? Helper.screenHeight(context) * 0.27
+                      : Helper.screenWidth(context) < 390
+                          ? Helper.screenHeight(context) * 0.43
+                          : Helper.screenHeight(context) * 0.33,
+                ),
 
-                            //làm dạng ngang và nếu điện thoại nhỏ sẽ đổi sang dạng đó
+                //làm dạng ngang và nếu điện thoại nhỏ sẽ đổi sang dạng đó
 
-                            itemBuilder: (_, index) {
-                              final product = products[index];
-                              return GestureDetector(
-                                onTap: () {
-                                  //thay login() thành widget cần đi tới
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => ProductDetail()),
-                                  );
-                                },
-                                child: InfoProductContainerVer(
-                                  // context: context,
-                                  imageProduct: product['imageUrl'],
-                                  nameProduct: product['name'],
-                                  priceProduct: Helper.formatCurrency(
-                                      product['priceProduct']),
-                                  isSale: product['isSale'],
-                                  oldPrice:
-                                      Helper.formatCurrency(product['oldPrice']),
-                                  salePercent: product['salePercent'],
-                                  rateProduct: '4.8',
-                                ),
-                              );
-                            });
+                itemBuilder: (_, index) {
+                  final product = products[index];
+                  return GestureDetector(
+                    onTap: () {
+                      //thay login() thành widget cần đi tới
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ProductDetail(
+                            name: product['name'],
+                            priceProduct:
+                                Helper.formatCurrency(product['priceProduct']),
+                            oldPrice:
+                                Helper.formatCurrency(product['oldPrice']),
+                            salePercent: product['salePercent'],
+                            rateProduct: '4.8',
+                            isSale: product['isSale'],
+                            idProduct: product['id'],
+                            imageUrl: product['imageUrl'],
+                            price: product['priceProduct'],
+                          ),
+                        ),
+                      );
+                    },
+                    child: InfoProductContainerVer(
+                      // context: context,
+                      imageProduct: product['imageUrl'],
+                      nameProduct: product['name'],
+                      priceProduct:
+                          Helper.formatCurrency(product['priceProduct']),
+                      isSale: product['isSale'],
+                      oldPrice: Helper.formatCurrency(product['oldPrice']),
+                      salePercent: product['salePercent'],
+                      rateProduct: '4.8',
+                    ),
+                  );
+                });
           }
         },
       ),
     );
   }
 }
-

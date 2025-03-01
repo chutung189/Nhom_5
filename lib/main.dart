@@ -9,9 +9,7 @@ import 'package:ecommerece_flutter_app/services/auth_service.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:ecommerece_flutter_app/pages/intro/splash.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:get/get.dart';
 import 'common/theme/theme.dart';
 
 Future<void> main() async {
@@ -60,11 +58,16 @@ class CheckUser extends StatefulWidget {
 }
 
 class _CheckUserState extends State<CheckUser> {
+   late ScrollController _scrollController;
+
+  
+
   @override
   void initState() {
+    _scrollController = ScrollController();
     AuthService().isLoggedIn().then((value) {
       if (value) {
-        Helper.navigateAndReplace(context, HomePage());
+        Helper.navigateAndReplace(context, HomePage(scrollController: _scrollController,));
       } else {
         Helper.navigateAndReplace(context, LoginPage());
       }

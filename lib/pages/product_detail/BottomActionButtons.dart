@@ -1,21 +1,18 @@
 import 'package:ecommerece_flutter_app/common/constants/colors.dart';
-import 'package:ecommerece_flutter_app/common/helper/helper.dart';
-import 'package:ecommerece_flutter_app/common/widgets/app_bar/app_bar.dart';
-import 'package:ecommerece_flutter_app/common/widgets/curved_edges/curved_edges_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class BottomActionButtons extends StatelessWidget {
-  final int discountedPrice;
+  final String priceProduct;
   final Function() onAddToCart;
   final Function() onBuyNow;
 
   const BottomActionButtons({
-    Key? key,
-    required this.discountedPrice,
+    super.key,
+    required this.priceProduct,
     required this.onAddToCart,
     required this.onBuyNow,
-  }) : super(key: key);
+  });
 
   String formatCurrency(int price) {
     return NumberFormat.currency(locale: 'vi_VN', symbol: '₫').format(price);
@@ -81,7 +78,7 @@ class BottomActionButtons extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    formatCurrency(discountedPrice),
+                    priceProduct,
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 16,
