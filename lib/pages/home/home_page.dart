@@ -9,7 +9,6 @@ import 'package:ecommerece_flutter_app/common/widgets/categorypage/accessories_p
 import 'package:ecommerece_flutter_app/common/widgets/categorypage/laptop_page.dart';
 import 'package:ecommerece_flutter_app/common/widgets/categorypage/pc_page.dart';
 import 'package:ecommerece_flutter_app/common/widgets/categorypage/smartphone_page.dart';
-import 'package:ecommerece_flutter_app/common/widgets/categorypage/tablet_page.dart';
 import 'package:ecommerece_flutter_app/common/widgets/curved_edges/curved_edges.dart';
 import 'package:ecommerece_flutter_app/common/widgets/main_title_view_all_butotn/main_title_and_viewall_button.dart';
 import 'package:ecommerece_flutter_app/pages/cart/cart_page.dart';
@@ -26,13 +25,14 @@ import '../../services/product_service.dart';
 import '../search/search_page.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key, required this.scrollController});
-  final ScrollController scrollController;
+  const HomePage({super.key});
+
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
+  late ScrollController scrollController;
   int currentBanner = 0;
   final TextEditingController _searchController = TextEditingController();
   final ProductService _productService = ProductService();
@@ -40,14 +40,25 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     _productsFuture = _productService.getProducts();
+    scrollController = ScrollController();
     super.initState();
+  }
+
+  void _scrollToTop() {
+    if (scrollController.hasClients) {
+      scrollController.animateTo(
+        0.0,
+        duration: Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
-        controller: widget.scrollController,
+        controller: scrollController,
         scrollDirection: Axis.vertical,
         child: Column(
           children: [
@@ -103,7 +114,6 @@ class _HomePageState extends State<HomePage> {
 
                         List<Product> products = snapshot.data!;
                         return GridView.builder(
-                           
                             itemCount: products.length,
                             shrinkWrap: true,
                             padding: EdgeInsets.symmetric(horizontal: 5),
@@ -169,6 +179,10 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _scrollToTop,
+        child: Icon(Icons.arrow_upward),
+      ),
     );
   }
 
@@ -222,10 +236,8 @@ class _HomePageState extends State<HomePage> {
         IconButton(
           padding: EdgeInsets.only(right: 8),
           onPressed: () {
-            Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const CartPage()));
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const CartPage()));
           },
           icon: Icon(Icons.shopping_cart),
           color: Colors.white,
@@ -384,10 +396,6 @@ class ListViewHorizontal extends StatelessWidget {
         icon: 'assets/icons/smartphone.jpg',
         page: SmartphonePage()),
     CategoryItem(
-        name: 'Tablet',
-        icon: 'assets/icons/vector-tablet.jpg',
-        page: TabletPage()),
-    CategoryItem(
         name: 'Accessories',
         icon: 'assets/icons/usb.jpg',
         page: AccessoriesPage()),
@@ -472,7 +480,6 @@ class CategoryItem {
 
   CategoryItem({required this.name, required this.icon, required this.page});
 }
-
 
 class SearchHead extends StatelessWidget {
   const SearchHead({

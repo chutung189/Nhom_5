@@ -27,6 +27,7 @@ import 'package:ecommerece_flutter_app/common/widgets/title/main_title.dart';
 import 'package:ecommerece_flutter_app/models/product.dart';
 import 'package:ecommerece_flutter_app/pages/intro/signin_signup/signin_page.dart';
 import 'package:ecommerece_flutter_app/pages/product_detail/product_detail.dart';
+import 'package:ecommerece_flutter_app/pages/search/search_page.dart';
 import 'package:ecommerece_flutter_app/services/product_service.dart';
 import 'package:flutter/material.dart';
 
@@ -35,26 +36,41 @@ import '../../common/widgets/gridview_products.dart';
 import '../../common/widgets/search/search.dart';
 
 class StoreScreen extends StatefulWidget {
-  const StoreScreen({super.key, required this.scrollController});
-  final ScrollController scrollController;
+  const StoreScreen({
+    super.key,
+  });
+
   @override
   State<StoreScreen> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<StoreScreen> {
+  late ScrollController scrollController;
+  final TextEditingController _searchController = TextEditingController();
   final ProductService _productService = ProductService();
   late Future<List<Product>> _productsFuture;
   @override
   void initState() {
     _productsFuture = _productService.getProducts();
+    scrollController = ScrollController();
     super.initState();
+  }
+
+  void _scrollToTop() {
+    if (scrollController.hasClients) {
+      scrollController.animateTo(
+        0.0,
+        duration: Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
-        controller: widget.scrollController,
+        controller: scrollController,
         scrollDirection: Axis.vertical,
         child: Column(
           children: [
@@ -64,13 +80,7 @@ class _HomePageState extends State<StoreScreen> {
                 children: [
                   _textAndCartButton(context),
                   KSizedBox.mediumSpace,
-                  SearchContainer(
-                    onTap: () {
-                      //thay login() thành widget cần đi tới
-                      Navigator.pushReplacement(context,
-                          MaterialPageRoute(builder: (context) => LoginPage()));
-                    },
-                  ),
+                  SearchHead(searchController: _searchController),
                   KSizedBox.mediumSpace,
                   MainTitle(title: 'Brand Category'),
                   KSizedBox.smallHeightSpace,
@@ -135,17 +145,17 @@ class _HomePageState extends State<StoreScreen> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => ProductDetail(
-                                        name: product.name,
-                                        priceProduct: Helper.formatCurrency(
-                                            product.priceProduct),
-                                        oldPrice: Helper.formatCurrency(
-                                            product.oldPrice),
-                                        salePercent: product.salePercent,
-                                        rateProduct: '4.8',
-                                        isSale: product.isSale,
-                                        idProduct: product.id,
-                                        imageUrl: product.imageUrl,
-                                        price: product.priceProduct,
+                                          name: product.name,
+                                          priceProduct: Helper.formatCurrency(
+                                              product.priceProduct),
+                                          oldPrice: Helper.formatCurrency(
+                                              product.oldPrice),
+                                          salePercent: product.salePercent,
+                                          rateProduct: '4.8',
+                                          isSale: product.isSale,
+                                          idProduct: product.id,
+                                          imageUrl: product.imageUrl,
+                                          price: product.priceProduct,
                                         )));
                           },
                           child: InfoProductContainerVer(
@@ -164,6 +174,10 @@ class _HomePageState extends State<StoreScreen> {
                 })
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _scrollToTop,
+        child: Icon(Icons.arrow_upward),
       ),
     );
   }
@@ -448,4 +462,56 @@ class CategoryItem {
   final Widget page;
 
   CategoryItem({required this.name, required this.icon, required this.page});
+}
+
+class SearchHead extends StatelessWidget {
+  const SearchHead({
+    super.key,
+    required TextEditingController searchController,
+  }) : _searchController = searchController;
+
+  final TextEditingController _searchController;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Container(
+        width: Helper.screenWidth(context) * 0.9,
+        decoration: BoxDecoration(
+            color: Helper.isDarkMode(context)
+                ? KColors.lightModeColor
+                : Colors.white,
+            borderRadius: BorderRadius.circular(15),
+            border: Border.all(color: KColors.dartModeColor)),
+        child: Padding(
+          padding: const EdgeInsets.only(left: 8.0),
+          child: TextField(
+            controller: _searchController,
+            decoration: InputDecoration(
+              border: InputBorder.none,
+              enabledBorder: InputBorder.none,
+              focusedBorder: InputBorder.none,
+              labelText: '  Nhập tên sản phẩm',
+              labelStyle: Theme.of(context).textTheme.bodySmall,
+              suffixIcon: IconButton(
+                icon: Icon(Icons.search),
+                onPressed: () {
+                  String searchQuery = _searchController.text.trim();
+                  if (searchQuery.isNotEmpty) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            SearchPage(searchQuery: searchQuery),
+                      ),
+                    );
+                  }
+                },
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }
