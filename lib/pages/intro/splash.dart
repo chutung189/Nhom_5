@@ -1,6 +1,8 @@
 import 'dart:async';
 
+import 'package:ecommerece_flutter_app/nav_page.dart';
 import 'package:ecommerece_flutter_app/pages/intro/onboarding/onboarding_page.dart';
+import 'package:ecommerece_flutter_app/pages/intro/signin_signup/signin_page.dart';
 import 'package:flutter/material.dart';
 
 import '../../common/constants/colors.dart';
@@ -21,7 +23,7 @@ class _SplashState extends State<Splash> {
       // Chuyển sang màn hình chính sau 3 giây
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => OnboardingPage()), 
+        MaterialPageRoute(builder: (context) => LoginPage()), 
       );
     });
   }
